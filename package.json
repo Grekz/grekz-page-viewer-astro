@@ -1,0 +1,20 @@
+{
+  "name": "grekz-page-viewer-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "astro check && astro build && aws s3 sync ./dist s3://astro.grekz.com --region us-east-1 --delete --cache-control \"max-age=3153600\""
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/preact": "^3.5.3",
+    "astro": "^4.16.10",
+    "preact": "^10.24.3",
+    "typescript": "^5.6.3"
+  }
+}
