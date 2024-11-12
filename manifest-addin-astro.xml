@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ContentApp">
+  <Id>b5432745-b783-40ce-bcef-174641cd9186</Id>
+  <Version>1.0.3</Version>
+  <ProviderName>Grekz, Inc.</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Grekz Page viewer" />
+  <Description DefaultValue="A page viewer available to render web pages in office powerpoint"/>
+  <AppDomains>
+    <AppDomain>https://astro.grekz.com</AppDomain>
+  </AppDomains>
+  <DefaultSettings>t
+    <SourceLocation DefaultValue="https://astro.grekz.com" />
+    <RequestedWidth>800</RequestedWidth> 
+    <RequestedHeight>600</RequestedHeight>
+  </DefaultSettings>
+  <AllowSnapshot>true</AllowSnapshot>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>
