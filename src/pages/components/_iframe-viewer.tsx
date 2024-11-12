@@ -4,7 +4,7 @@ interface IframeViewerProps {
   initialUrl?: string
 }
 
-export default function IframeViewer({ initialUrl = "https://asdasdagrekz.com" }: IframeViewerProps) {
+export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
   const [warning, setWarning] = useState("")
