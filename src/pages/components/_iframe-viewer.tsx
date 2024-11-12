@@ -4,9 +4,10 @@ interface IframeViewerProps {
   initialUrl?: string
 }
 
-export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
+export default function IframeViewer({ initialUrl = "https://asdasdagrekz.com" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
+  const [warning, setWarning] = useState("")
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
@@ -17,9 +18,23 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
     <div class="flex flex-col flex-1">
       {!iframeUrl && <h1>Page viewer</h1>}
       {iframeUrl ? (
-        <iframe src={iframeUrl} title="Embedded content" class="flex-1" />
+        <iframe
+          src={iframeUrl}
+          title="Embedded content"
+          class="flex-1"
+          onError={() => setWarning("Error loading the page")}
+          onAbort={() => setWarning("Abort loading the page")}
+        />
       ) : (
-        <span>You can type the selected page below</span>
+        <p>
+          <span>You can type the selected page below.</span>
+          <br />
+          <span>
+            Make sure the url starts with <b>https://</b>
+          </span>
+          <br />
+          {warning && <span>{warning}</span>}
+        </p>
       )}
 
       <form onSubmit={handleSubmit} class="flex form">
