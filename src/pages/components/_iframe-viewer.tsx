@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks"
+import { useEffect, useState } from "preact/hooks"
 
 interface IframeViewerProps {
   initialUrl?: string
@@ -13,18 +13,16 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
     e.preventDefault()
     setIframeUrl(inputUrl)
   }
+  useEffect(() => {
+    console.log({ localStorage, sessionStorage, indexedDB })
+    setWarning(JSON.stringify({ localStorage, sessionStorage, indexedDB }))
+  })
 
   return (
     <div class="flex flex-col flex-1">
       {!iframeUrl && <h1>Page viewer</h1>}
       {iframeUrl ? (
-        <iframe
-          src={iframeUrl}
-          title="Embedded content"
-          class="flex-1"
-          onError={() => setWarning("Error loading the page")}
-          onAbort={() => setWarning("Abort loading the page")}
-        />
+        <iframe src={iframeUrl} title="Embedded content" class="flex-1" />
       ) : (
         <p>
           <span>You can type the selected page below.</span>
@@ -33,9 +31,9 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
             Make sure the url starts with <b>https://</b>
           </span>
           <br />
-          {warning && <span>{warning}</span>}
         </p>
       )}
+      {warning && <span>{warning}</span>}
 
       <form onSubmit={handleSubmit} class="flex form">
         <input

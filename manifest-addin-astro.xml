@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ContentApp">
   <Id>b5432745-b783-40ce-bcef-174641cd9186</Id>
-  <Version>1.0.4</Version>
+  <Version>1.0.6</Version>
   <ProviderName>Grekz, Inc.</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="Grekz Page viewer" />
+  <DisplayName DefaultValue="Grekz Page viewer v1.0.6" />
   <Description DefaultValue="A page viewer available to render web pages in office powerpoint"/>
   <AppDomains>
     <AppDomain>https://astro.grekz.com</AppDomain>
@@ -13,7 +13,7 @@
     <Host Name="Presentation"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://astro.grekz.com" />
+    <SourceLocation DefaultValue="https://astro.grekz.com?v=1.0.6" />
     <RequestedWidth>955</RequestedWidth> 
     <RequestedHeight>540</RequestedHeight>
   </DefaultSettings>
