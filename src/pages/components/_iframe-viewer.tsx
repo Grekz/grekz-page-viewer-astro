@@ -22,7 +22,23 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
 
     // Office is ready
     Office.onReady(function () {
-      setWarning((it) => `Office Loaded: ${it}`)
+      const isPowerPoint = Office.HostType.PowerPoint === Office.context.host
+      setWarning((it) => `Office Loaded! isPowerPoint: ${isPowerPoint} =>  ${it}`)
+      if (isPowerPoint) {
+        Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, function (asyncResult) {
+          if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+            setWarning((it) => "Error:" + asyncResult.error.message + `-- ${it}`)
+          } else {
+            const { slides } = asyncResult.value as { slides: [{ index: number }] }
+            const curSlide = slides[0]
+            const index = curSlide.index
+            localStorage.setItem(`gpc/slide/idx/${index}`, "newurl!")
+            localStorage.setItem("slides", JSON.stringify(slides))
+          }
+        })
+      }
+
+      setWarning((it) => `${it} ---- new local: ${JSON.stringify({ localStorage })}`)
     })
   })
 
