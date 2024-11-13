@@ -12,10 +12,18 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const handleSubmit = (e: Event) => {
     e.preventDefault()
     setIframeUrl(inputUrl)
+    if (inputUrl.length > 0) {
+      localStorage.setItem("gpc/slides/1/url", inputUrl)
+    }
   }
   useEffect(() => {
     console.log({ localStorage, sessionStorage, indexedDB })
     setWarning(JSON.stringify({ localStorage, sessionStorage, indexedDB }))
+
+    // Office is ready
+    Office.onReady(function () {
+      setWarning((it) => `Office Loaded: ${it}`)
+    })
   })
 
   return (
