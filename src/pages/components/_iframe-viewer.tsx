@@ -4,6 +4,33 @@ interface IframeViewerProps {
   initialUrl?: string
 }
 
+type MetadataCallbackFn = (result: Office.AsyncResult<unknown>) => void
+interface MetadataValue {
+  slides: [{ id: number }]
+}
+interface Metadata {
+  value: MetadataValue
+}
+
+const setInLocalStorage = (key: string, value: string) => {
+  const partitionKey = Office?.context?.partitionKey ?? ""
+  const newKey = `${partitionKey}/gpc/${key}`
+  localStorage.setItem(newKey, value)
+}
+
+const getFromLocalStorage = (key: string) => {
+  const partitionKey = Office?.context?.partitionKey ?? ""
+  const newKey = `${partitionKey}/gpc/${key}`
+  return localStorage.getItem(newKey) ?? ""
+}
+
+const getIdFromMetadata = ({ slides }: MetadataValue) => {
+  if (slides.length > 0) {
+    return String(slides[0].id)
+  }
+  return "no-id"
+}
+
 export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
@@ -11,36 +38,38 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
-    setIframeUrl(inputUrl)
-    if (inputUrl.length > 0) {
-      localStorage.setItem("gpc/slides/1/url", inputUrl)
+    setIframeUrl(inputUrl.trim())
+    if (inputUrl.trim().length > 0 && inputUrl !== iframeUrl) {
+      Office.onReady(() => {
+        const isPowerPoint = Office.HostType.PowerPoint === Office.context.host
+        if (isPowerPoint) {
+          Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
+            if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+              const id = getIdFromMetadata(asyncResult.value as MetadataValue)
+              setInLocalStorage(id, inputUrl)
+              setWarning(`urlStored=${inputUrl} -- LocalStorage=${JSON.stringify(localStorage)}`)
+            }
+          })
+        }
+      })
     }
   }
-  useEffect(() => {
-    console.log({ localStorage, sessionStorage, indexedDB })
-    setWarning(JSON.stringify({ localStorage, sessionStorage, indexedDB }))
 
-    // Office is ready
-    Office.onReady(function () {
+  useEffect(() => {
+    Office.onReady(() => {
       const isPowerPoint = Office.HostType.PowerPoint === Office.context.host
-      setWarning((it) => `Office Loaded! isPowerPoint: ${isPowerPoint} =>  ${it}`)
       if (isPowerPoint) {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, function (asyncResult) {
-          if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-            setWarning((it) => "Error:" + asyncResult.error.message + `-- ${it}`)
-          } else {
-            const { slides } = asyncResult.value as { slides: [{ index: number }] }
-            const curSlide = slides[0]
-            const index = curSlide.index
-            localStorage.setItem(`gpc/slide/idx/${index}`, "newurl!")
-            localStorage.setItem("slides", JSON.stringify(slides))
+        Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
+          if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+            const id = getIdFromMetadata(asyncResult.value as MetadataValue)
+            const newUrl = getFromLocalStorage(id)
+            setIframeUrl(newUrl)
+            setWarning(`Loaded from localStorage ${JSON.stringify(localStorage)}`)
           }
         })
       }
-
-      setWarning((it) => `${it} ---- new local: ${JSON.stringify({ localStorage })}`)
     })
-  })
+  }, [])
 
   return (
     <div class="flex flex-col flex-1">
