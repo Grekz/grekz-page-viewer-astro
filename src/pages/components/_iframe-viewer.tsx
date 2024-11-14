@@ -56,6 +56,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
             const newUrl = getFromLocalStorage(id)
             if (newUrl.length > 0 && newUrl !== iframeUrl) {
               setIframeUrl(newUrl)
+              setInputUrl(newUrl)
             }
           }
         })
