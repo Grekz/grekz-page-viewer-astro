@@ -13,8 +13,16 @@ interface Metadata {
 }
 
 const getKey = (key: string) => `${Office?.context?.partitionKey ?? ""}/gpc/${key}`
-const setInLocalStorage = (key: string, value: string) => localStorage.setItem(getKey(key), value)
-const getFromLocalStorage = (key: string) => localStorage.getItem(getKey(key)) ?? ""
+const setInLocalStorage = (key: string, value: string) => {
+  const newKey = getKey(key)
+  Office?.context?.document?.settings?.set(newKey, value)
+  localStorage.setItem(newKey, value)
+  Office?.context?.document?.settings?.saveAsync()
+}
+const getFromLocalStorage = (key: string) => {
+  const newKey = getKey(key)
+  return Office?.context?.document?.settings?.get(newKey) ?? localStorage.getItem(newKey) ?? ""
+}
 
 const getIdFromMetadata = ({ slides }: MetadataValue) => {
   if (slides.length > 0) {
