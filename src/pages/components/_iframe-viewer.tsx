@@ -12,17 +12,9 @@ interface Metadata {
   value: MetadataValue
 }
 
-const setInLocalStorage = (key: string, value: string) => {
-  const partitionKey = Office?.context?.partitionKey ?? ""
-  const newKey = `${partitionKey}/gpc/${key}`
-  localStorage.setItem(newKey, value)
-}
-
-const getFromLocalStorage = (key: string) => {
-  const partitionKey = Office?.context?.partitionKey ?? ""
-  const newKey = `${partitionKey}/gpc/${key}`
-  return localStorage.getItem(newKey) ?? ""
-}
+const getKey = (key: string) => `${Office?.context?.partitionKey ?? ""}/gpc/${key}`
+const setInLocalStorage = (key: string, value: string) => localStorage.setItem(getKey(key), value)
+const getFromLocalStorage = (key: string) => localStorage.getItem(getKey(key)) ?? ""
 
 const getIdFromMetadata = ({ slides }: MetadataValue) => {
   if (slides.length > 0) {
@@ -34,20 +26,19 @@ const getIdFromMetadata = ({ slides }: MetadataValue) => {
 export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
-  const [warning, setWarning] = useState("")
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
-    setIframeUrl(inputUrl.trim())
-    if (inputUrl.trim().length > 0 && inputUrl !== iframeUrl) {
+    const newUrl = inputUrl.trim()
+    if (newUrl.length > 0 && newUrl !== iframeUrl) {
+      setIframeUrl(newUrl)
       Office.onReady(() => {
         const isPowerPoint = Office.HostType.PowerPoint === Office.context.host
         if (isPowerPoint) {
           Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
             if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
               const id = getIdFromMetadata(asyncResult.value as MetadataValue)
-              setInLocalStorage(id, inputUrl)
-              setWarning(`urlStored=${inputUrl} -- LocalStorage=${JSON.stringify(localStorage)}`)
+              setInLocalStorage(id, newUrl)
             }
           })
         }
@@ -63,8 +54,9 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
           if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
             const id = getIdFromMetadata(asyncResult.value as MetadataValue)
             const newUrl = getFromLocalStorage(id)
-            setIframeUrl(newUrl)
-            setWarning(`Loaded from localStorage ${JSON.stringify(localStorage)}`)
+            if (newUrl.length > 0 && newUrl !== iframeUrl) {
+              setIframeUrl(newUrl)
+            }
           }
         })
       }
@@ -86,7 +78,6 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
           <br />
         </p>
       )}
-      {warning && <span>{warning}</span>}
 
       <form onSubmit={handleSubmit} class="flex form">
         <input
