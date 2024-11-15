@@ -13,15 +13,14 @@ interface Metadata {
 }
 
 const getKey = (key: string) => `${Office?.context?.partitionKey ?? ""}/gpc/${key}`
-const setInLocalStorage = (key: string, value: string) => {
+const setInStorage = (key: string, value: string) => {
   const newKey = getKey(key)
   Office?.context?.document?.settings?.set(newKey, value)
-  localStorage.setItem(newKey, value)
   Office?.context?.document?.settings?.saveAsync()
 }
-const getFromLocalStorage = (key: string) => {
+const getFromStorage = (key: string) => {
   const newKey = getKey(key)
-  return Office?.context?.document?.settings?.get(newKey) ?? localStorage.getItem(newKey) ?? ""
+  return Office?.context?.document?.settings?.get(newKey) ?? ""
 }
 
 const getIdFromMetadata = ({ slides }: MetadataValue) => {
@@ -46,7 +45,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
           Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
             if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
               const id = getIdFromMetadata(asyncResult.value as MetadataValue)
-              setInLocalStorage(id, newUrl)
+              setInStorage(id, newUrl)
             }
           })
         }
@@ -61,7 +60,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
         Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
           if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
             const id = getIdFromMetadata(asyncResult.value as MetadataValue)
-            const newUrl = getFromLocalStorage(id)
+            const newUrl = getFromStorage(id)
             if (newUrl.length > 0 && newUrl !== iframeUrl) {
               setIframeUrl(newUrl)
               setInputUrl(newUrl)
@@ -74,18 +73,20 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
 
   return (
     <div class="flex flex-col flex-1">
-      {!iframeUrl && <h1>Page viewer</h1>}
       {iframeUrl ? (
         <iframe src={iframeUrl} title="Embedded content" class="flex-1" />
       ) : (
-        <p>
-          <span>You can type the selected page below.</span>
-          <br />
-          <span>
-            Make sure the url starts with <b>https://</b>
-          </span>
-          <br />
-        </p>
+        <div class="text">
+          <h1>GPC Page viewer</h1>
+          <p>
+            <span>You can type the selected page below.</span>
+            <br />
+            <span>
+              Make sure the url starts with <b>https://</b>
+            </span>
+            <br />
+          </p>
+        </div>
       )}
 
       <form onSubmit={handleSubmit} class="flex form">
