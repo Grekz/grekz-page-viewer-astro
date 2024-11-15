@@ -7,7 +7,7 @@
   <DisplayName DefaultValue="v1.2.4 - GPC Page viewer" />
   <DefaultSettings>
     <SourceLocation DefaultValue="https://astro.grekz.com?v=1.2.4" />
-    <RequestedWidth>955</RequestedWidth> 
+    <RequestedWidth>960</RequestedWidth> 
     <RequestedHeight>540</RequestedHeight>
   </DefaultSettings>
   <Description DefaultValue="A page viewer available to render web pages in office powerpoint"/>
