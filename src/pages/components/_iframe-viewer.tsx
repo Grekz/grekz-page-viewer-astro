@@ -33,6 +33,7 @@ const getIdFromMetadata = ({ slides }: MetadataValue) => {
 export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
+  const [extraClass, setExtraClass] = useState("show")
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
@@ -52,6 +53,10 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
       })
     }
   }
+  const viewChangeHandler = (event: { activeView: Office.ActiveView }) => {
+    const isPresentationMode = event.activeView === Office.ActiveView.Read
+    setExtraClass(isPresentationMode ? "hide" : "show")
+  }
 
   useEffect(() => {
     Office.onReady(() => {
@@ -67,6 +72,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
             }
           }
         })
+        Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, viewChangeHandler)
       }
     })
   }, [])
@@ -89,7 +95,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} class="flex form">
+      <form onSubmit={handleSubmit} class={`flex form ${extraClass}`}>
         <input
           type="url"
           value={inputUrl}

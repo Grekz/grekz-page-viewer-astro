@@ -29,12 +29,11 @@ const url = Astro.url.searchParams.get('url') || '';
 * {
   margin: 0;
   padding: 0;
+  border:none;
 }
 
 input,
-button,
-textarea,
-select {
+button{
   font: inherit;
 }
 
@@ -89,5 +88,8 @@ h1 {
 .text {
   padding: 24px 48px;
   margin-bottom: 1rem;
+}
+.hide {
+  display: none;
 }
 </style>
