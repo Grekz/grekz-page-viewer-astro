@@ -1,7 +1,7 @@
 ---
-import IframeViewer from './components/_iframe-viewer';
+import IframeViewer from './components/_iframe-viewer'
 
-const url = Astro.url.searchParams.get('url') || '';
+const url = Astro.url.searchParams.get('url') || ''
 ---
 
 <html lang="en">
@@ -18,78 +18,84 @@ const url = Astro.url.searchParams.get('url') || '';
   </body>
 </html>
 
-
 <style is:global>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-* {
-  margin: 0;
-  padding: 0;
-  border: none;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
 
-input,
-button {
-  font: inherit;
-}
+  input,
+  button {
+    font: inherit;
+  }
 
-body,
-html {
-  height: 100%;
-  scroll-behavior: smooth;
-  min-height: 100vh;
-  text-rendering: optimizeSpeed;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-}
+  body,
+  html {
+    height: 100%;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Helvetica Neue',
+      Arial,
+      'Noto Sans',
+      sans-serif;
+  }
 
-.flex {
-  display: flex;
-}
+  .flex {
+    display: flex;
+  }
 
-.flex-col {
-  flex-direction: column;
-}
-.flex-1 {
-  flex: 1;
-}
-.page {
-  height: 100%;
-  background-color: #eee;
-}
-.form {
-  gap: 1rem;
-  padding: 1rem 3rem;
-}
-.form > * {
-  padding: 0.25rem 0.5rem;
-  border: 1px solid gray;
-  border-radius: 4px;
-}
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .page {
+    height: 100%;
+    background-color: #eee;
+  }
+  .form {
+    gap: 1rem;
+    padding: 1rem 3rem;
+  }
+  .form > * {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid gray;
+    border-radius: 4px;
+  }
 
-.form > button {
-  width: 100px;
-  background-color: #efefef;
-  cursor: pointer;
-}
-h1 {
-  font-size: 32px;
-  line-height: 48px;
-  font-weight: 600;
-}
-.text {
-  padding: 24px 48px;
-  margin-bottom: 1rem;
-}
-.hide {
-  display: none;
-}
+  .form > button {
+    width: 100px;
+    background-color: #efefef;
+    cursor: pointer;
+  }
+  h1 {
+    font-size: 32px;
+    line-height: 48px;
+    font-weight: 600;
+  }
+  .text {
+    padding: 24px 48px;
+    margin-bottom: 1rem;
+  }
+  .hide {
+    display: none;
+  }
 </style>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks"
+import { useEffect, useState } from 'preact/hooks'
 
 interface IframeViewerProps {
   initialUrl?: string
@@ -12,7 +12,7 @@ interface Metadata {
   value: MetadataValue
 }
 
-const getKey = (key: string) => `${Office?.context?.partitionKey ?? ""}/gpc/${key}`
+const getKey = (key: string) => `${Office?.context?.partitionKey ?? ''}/gpc/${key}`
 const setInStorage = (key: string, value: string) => {
   const newKey = getKey(key)
   Office?.context?.document?.settings?.set(newKey, value)
@@ -20,31 +20,20 @@ const setInStorage = (key: string, value: string) => {
 }
 const getFromStorage = (key: string) => {
   const newKey = getKey(key)
-  return Office?.context?.document?.settings?.get(newKey) ?? ""
+  return Office?.context?.document?.settings?.get(newKey) ?? ''
 }
 
 const getIdFromMetadata = ({ slides }: MetadataValue) => {
   if (slides.length > 0) {
     return String(slides[0].id)
   }
-  return "no-id"
+  return 'no-id'
 }
 
-const allowedUrls = [
-  "www.gartner.com/",
-  "staging.internal.pulse.qa/",
-  "dev01.internal.pulse.qa/",
-  "dev02.internal.pulse.qa/",
-  "dev03.internal.pulse.qa/",
-  "dev04.internal.pulse.qa/",
-  "dev05.internal.pulse.qa/",
-  "dev06.internal.pulse.qa/",
-  "dev07.internal.pulse.qa/",
-  "localhost:",
-]
+const allowedUrls = ['']
 const getNewUrl = (url: string) => {
   let resultUrl = url.trim()
-  resultUrl = resultUrl.replace("^http(s)://", "")
+  resultUrl = resultUrl.replace('^http(s)://', '')
   if (allowedUrls.some((it) => url.startsWith(it))) {
   }
   resultUrl = `https://${resultUrl}`
@@ -52,10 +41,10 @@ const getNewUrl = (url: string) => {
   return resultUrl
 }
 
-export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
+export default function IframeViewer({ initialUrl = '' }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
-  const [extraClass, setExtraClass] = useState("show")
+  const [extraClass, setExtraClass] = useState('show')
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
@@ -78,7 +67,7 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   }
   const viewChangeHandler = (event: { activeView: Office.ActiveView }) => {
     const isPresentationMode = event.activeView === Office.ActiveView.Read
-    setExtraClass(isPresentationMode ? "hide" : "show")
+    setExtraClass(isPresentationMode ? 'hide' : 'show')
   }
 
   useEffect(() => {
