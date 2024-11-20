@@ -1,0 +1,9 @@
+/node_modules/
+/public
+
+# testing
+/coverage
+
+# production
+/build
+/dist

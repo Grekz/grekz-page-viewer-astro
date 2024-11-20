@@ -30,6 +30,28 @@ const getIdFromMetadata = ({ slides }: MetadataValue) => {
   return "no-id"
 }
 
+const allowedUrls = [
+  "www.gartner.com/",
+  "staging.internal.pulse.qa/",
+  "dev01.internal.pulse.qa/",
+  "dev02.internal.pulse.qa/",
+  "dev03.internal.pulse.qa/",
+  "dev04.internal.pulse.qa/",
+  "dev05.internal.pulse.qa/",
+  "dev06.internal.pulse.qa/",
+  "dev07.internal.pulse.qa/",
+  "localhost:",
+]
+const getNewUrl = (url: string) => {
+  let resultUrl = url.trim()
+  resultUrl = resultUrl.replace("^http(s)://", "")
+  if (allowedUrls.some((it) => url.startsWith(it))) {
+  }
+  resultUrl = `https://${resultUrl}`
+
+  return resultUrl
+}
+
 export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
   const [inputUrl, setInputUrl] = useState(initialUrl)
   const [iframeUrl, setIframeUrl] = useState(initialUrl)
@@ -37,7 +59,8 @@ export default function IframeViewer({ initialUrl = "" }: IframeViewerProps) {
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
-    const newUrl = inputUrl.trim()
+    const newUrl = getNewUrl(inputUrl)
+
     if (newUrl.length > 0 && newUrl !== iframeUrl) {
       setIframeUrl(newUrl)
       Office.onReady(() => {
