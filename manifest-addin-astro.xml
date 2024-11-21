@@ -3,10 +3,10 @@
   <Id>b5432745-b783-40ce-bcef-174641cd9186</Id>
   <ProviderName>Grekz, Inc.</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <Version>1.2.5</Version>
-  <DisplayName DefaultValue="v1.2.5 - GPC Page viewer" />
+  <Version>1.2.8</Version>
+  <DisplayName DefaultValue="v1.2.8 - GPC Page viewer" />
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://astro.grekz.com?v=1.2.5" />
+    <SourceLocation DefaultValue="https://astro.grekz.com?v=1.2.8" />
     <RequestedWidth>960</RequestedWidth> 
     <RequestedHeight>540</RequestedHeight>
   </DefaultSettings>

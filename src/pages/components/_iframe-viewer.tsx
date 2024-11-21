@@ -1,44 +1,8 @@
 import { useEffect, useState } from 'preact/hooks'
+import { getFromStorage, getIdFromMetadata, getNewUrl, setInStorage, type MetadataValue } from '../_utils/iframeUtils'
 
 interface IframeViewerProps {
   initialUrl?: string
-}
-
-type MetadataCallbackFn = (result: Office.AsyncResult<unknown>) => void
-interface MetadataValue {
-  slides: [{ id: number }]
-}
-interface Metadata {
-  value: MetadataValue
-}
-
-const getKey = (key: string) => `${Office?.context?.partitionKey ?? ''}/gpc/${key}`
-const setInStorage = (key: string, value: string) => {
-  const newKey = getKey(key)
-  Office?.context?.document?.settings?.set(newKey, value)
-  Office?.context?.document?.settings?.saveAsync()
-}
-const getFromStorage = (key: string) => {
-  const newKey = getKey(key)
-  return Office?.context?.document?.settings?.get(newKey) ?? ''
-}
-
-const getIdFromMetadata = ({ slides }: MetadataValue) => {
-  if (slides.length > 0) {
-    return String(slides[0].id)
-  }
-  return 'no-id'
-}
-
-const allowedUrls = ['']
-const getNewUrl = (url: string) => {
-  let resultUrl = url.trim()
-  resultUrl = resultUrl.replace('^http(s)://', '')
-  if (allowedUrls.some((it) => url.startsWith(it))) {
-  }
-  resultUrl = `https://${resultUrl}`
-
-  return resultUrl
 }
 
 export default function IframeViewer({ initialUrl = '' }: IframeViewerProps) {
@@ -49,7 +13,7 @@ export default function IframeViewer({ initialUrl = '' }: IframeViewerProps) {
   const handleSubmit = (e: Event) => {
     e.preventDefault()
     const newUrl = getNewUrl(inputUrl)
-
+    setInputUrl(newUrl)
     if (newUrl.length > 0 && newUrl !== iframeUrl) {
       setIframeUrl(newUrl)
       Office.onReady(() => {
@@ -109,7 +73,6 @@ export default function IframeViewer({ initialUrl = '' }: IframeViewerProps) {
 
       <form onSubmit={handleSubmit} class={`flex form ${extraClass}`}>
         <input
-          type="url"
           value={inputUrl}
           onChange={(e) => setInputUrl(e.currentTarget.value)}
           placeholder="Enter URL to display"
