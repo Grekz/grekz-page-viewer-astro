@@ -20,15 +20,15 @@ jobs:
   dependabot:
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Add a label for all production dependencies
-        if: ${{ steps.metadata.outputs.dependency-type == 'direct:production' }}
+        if: ${{ steps.dependabot-metadata.outputs.dependency-type == 'direct:production' }}
         run: gh pr edit "$PR_URL" --add-label "prod-deps"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
@@ -39,7 +39,7 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Auto-Approve PR
-        if: ${{ steps.metadata.outputs.dependency-group == 'dev-deps' }}
+        if: ${{ steps.dependabot-metadata.outputs.dependency-group == 'dev-deps' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
