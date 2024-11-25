@@ -1,0 +1,43 @@
+name: pnpm workflow
+
+on: push
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  unit:
+    timeout-minutes: 3
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.11.0]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - run: pnpm run test:ci
+        env:
+          JEST_JUNIT_OUTPUT_FILE: reports/junit/js-test-results.xml
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure() # run this step even if previous step failed
+        with:
+          name: JEST Tests
+          reporter: jest-junit
+          path: reports/junit/js-test-results.xml
