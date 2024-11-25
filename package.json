@@ -18,7 +18,7 @@
     "typescript": "^5.6.3"
   },
   "devDependencies": {
-    "@types/office-js": "^1.0.444",
+    "@types/office-js": "^1.0.449",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1"
   }
